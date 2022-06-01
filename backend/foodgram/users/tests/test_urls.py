@@ -1,4 +1,5 @@
 from rest_framework import status
+from rest_framework.authtoken.models import Token
 from rest_framework.test import APITestCase
 from users import models
 
@@ -74,6 +75,17 @@ class RespondCodesTest(APITestCase):
         token = f'Token {get_token_response}'
         self.client.credentials(HTTP_AUTHORIZATION=token)
 
+    def request_sub_test(self, data, method):
+        for url, expected in data.items():
+            with self.subTest(url=url):
+                if method == 'get':
+                    response = self.client.get(url)
+                if method == 'post':
+                    response = self.client.post(url)
+                if method == 'delete':
+                    response = self.client.delete(url)
+                self.assertEqual(response.status_code, expected)
+
     def test_get_users_list(self):
         response = self.client.get('http://localhost/api/users/')
         self.assertEqual(response.status_code,
@@ -99,10 +111,8 @@ class RespondCodesTest(APITestCase):
             'http://localhost/api/users/me/':
             RespondCodesTest.status_codes.get('auth_error'),
         }
-        for url, expected in urls_and_status_codes.items():
-            with self.subTest(url=url):
-                response = self.client.get(url)
-                self.assertEqual(response.status_code, expected)
+
+        self.request_sub_test(urls_and_status_codes, 'get')
 
     def test_authorized_user_profile(self):
         self.authorize()
@@ -115,10 +125,7 @@ class RespondCodesTest(APITestCase):
             'http://localhost/api/users/me/':
             RespondCodesTest.status_codes.get('ok'),
         }
-        for url, expected in urls_and_status_codes.items():
-            with self.subTest(url=url):
-                response = self.client.get(url)
-                self.assertEqual(response.status_code, expected)
+        self.request_sub_test(urls_and_status_codes, 'get')
 
     def test_create_token(self):
         response = self.create_and_get_token()
@@ -166,31 +173,66 @@ class RespondCodesTest(APITestCase):
         url = 'http://localhost/api/users/subscriptions/'
         response = self.client.get(url)
         self.assertEqual(response.status_code,
-                         status.HTTP_401_UNAUTHORIZED)
+                         RespondCodesTest.status_codes.get('auth_error')
+                         )
         self.authorize()
         response = self.client.get(url)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.status_code,
+                         RespondCodesTest.status_codes.get('ok')
+                         )
 
     def test_subscribe(self):
         user = self.create_and_get_user('correct')
         author = self.create_and_get_user('correct_2')
-        self.authorize()
         user_id = user.data.get('id')
         author_id = author.data.get('id')
 
         url = f'http://localhost/api/users/{author_id}/subscribe/'
         response = self.client.post(url)
         self.assertEqual(response.status_code,
-                         status.HTTP_401_UNAUTHORIZED)
+                         RespondCodesTest.status_codes.get('auth_error')
+                         )
 
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.authorize()
 
-        status_codes = {
-            'ok': status.HTTP_200_OK,
-            'created': status.HTTP_201_CREATED,
-            'no_content': status.HTTP_204_NO_CONTENT,
-            'validation_error': status.HTTP_400_BAD_REQUEST,
-            'auth_error': status.HTTP_401_UNAUTHORIZED,
-            'not_found_error': status.HTTP_404_NOT_FOUND,
+        urls_and_status_codes = {
+            f'http://localhost/api/users/{user_id}/subscribe/':
+            RespondCodesTest.status_codes.get('validation_error'),
+
+            'http://localhost/api/users/666/subscribe/':
+            RespondCodesTest.status_codes.get('not_found_error'),
+
+            f'http://localhost/api/users/{author_id}/subscribe/':
+            RespondCodesTest.status_codes.get('created'),
+
+            f'http://localhost/api/users/{author_id}/subscribe/':
+            RespondCodesTest.status_codes.get('validation_error')
         }
+
+        self.request_sub_test(urls_and_status_codes, 'post')
+
+    def test_destroy_subscribtion(self):
+        author = self.create_and_get_user('correct_2')
+        author_id = author.data.get('id')
+
+        url = f'http://localhost/api/users/{author_id}/subscribe/'
+        response = self.client.delete(url)
+        self.assertEqual(response.status_code,
+                         RespondCodesTest.status_codes.get('auth_error')
+                         )
+
+        self.authorize()
+        self.client.post(f'http://localhost/api/users/{author_id}/subscribe/')
+
+        urls_and_status_codes = {
+            'http://localhost/api/users/666/subscribe/':
+            RespondCodesTest.status_codes.get('not_found_error'),
+
+            f'http://localhost/api/users/{author_id}/subscribe/':
+            RespondCodesTest.status_codes.get('no_content'),
+
+            f'http://localhost/api/users/{author_id}/subscribe/':
+            RespondCodesTest.status_codes.get('validation_error')
+        }
+
+        self.request_sub_test(urls_and_status_codes, 'delete')
