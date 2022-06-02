@@ -9,9 +9,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY")
 
-DEBUG = True
+DEBUG = int(os.getenv("DJANGO_DEBUG", default=0))
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -128,3 +128,7 @@ DJOSER = {
         'user': ['rest_framework.permissions.IsAuthenticated']
     },
 }
+
+# FIXTURE_DIRS = (
+#     '/users/fixtures/',
+# )

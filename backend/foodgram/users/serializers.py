@@ -1,7 +1,6 @@
 from djoser import serializers as djoser_serializers
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
-
 from users import models
 
 
