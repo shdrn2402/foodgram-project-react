@@ -1,3 +1,5 @@
+from api import models as api_models
+from api import serializers as api_serializers
 from djoser import serializers as djoser_serializers
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
@@ -73,10 +75,11 @@ class FollowSerializer(serializers.ModelSerializer):
     def get_recipes(self, obj):
         request = self.context.get('request')
         limit = request.GET.get('recipes_limit')
-        queryset = Recipe.objects.filter(author=obj.author)
+        queryset = api_models.Recipe.objects.filter(author=obj.author)
         if limit:
             queryset = queryset[:int(limit)]
-        return CropRecipeSerializer(queryset, many=True).data
+        return api_serializers.CropRecipeSerializer(queryset,
+                                                    many=True).data
 
     def get_recipes_count(self, obj):
-        return Recipe.objects.filter(author=obj.author).count()
+        return api_models.Recipe.objects.filter(author=obj.author).count()

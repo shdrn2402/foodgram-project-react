@@ -1,4 +1,4 @@
-from django.urls import include, path, re_path
+from django.urls import include, path
 from djoser import views as djoser_views
 from rest_framework import routers
 from users import views as users_views

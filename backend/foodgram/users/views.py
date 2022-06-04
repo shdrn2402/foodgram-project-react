@@ -53,11 +53,11 @@ class CustomUserViewset(views.UserViewSet):
             author = get_object_or_404(models.User, id=id)
             if user == author:
                 return Response(
-                    {'errors': 'Нельзя подписаться на самого себя'},
+                    {'errors': 'Кроме себя любимого есть и другие авторы.'},
                     status=status.HTTP_400_BAD_REQUEST)
             if models.Follow.objects.filter(user=user, author=author).exists():
                 return Response(
-                    {'errors': 'Вы уже подписаны на данного пользователя'},
+                    {'errors': 'Вы уже подписаны на данного пользователя.'},
                     status=status.HTTP_400_BAD_REQUEST)
             follow = models.Follow.objects.create(user=user, author=author)
             serializer = serializers.FollowSerializer(
@@ -69,13 +69,13 @@ class CustomUserViewset(views.UserViewSet):
             author = get_object_or_404(models.User, id=id)
             if user == author:
                 return Response({
-                    'errors': 'Нельзя отписаться от самого себя'
+                    'errors': 'Нельзя отписаться от самого себя.'
                 })
             follow = models.Follow.objects.filter(user=user, author=author)
             if follow.exists():
                 follow.delete()
                 return Response(status=status.HTTP_204_NO_CONTENT)
             return Response(serializer.data, {
-                'errors': 'Вы не подписаны на этого автора'
+                'errors': 'Вы не подписаны на этого автора.'
             })
         return Response(status=status.HTTP_204_NO_CONTENT)
