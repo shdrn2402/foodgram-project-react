@@ -115,7 +115,7 @@ class RecipeViewSet(ModelViewSet):
         for element in ingredients:
             shoping_list.setdefault(
                 element.ingredient.name, {
-                    'unit': element.ingredient.measurement_unit,
+                    'measurement_unit': element.ingredient.measurement_unit,
                     'amount': 0}
             )
             shoping_list[element.ingredient.name]['amount'] += element.amount
