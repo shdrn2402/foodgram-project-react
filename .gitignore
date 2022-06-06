@@ -134,6 +134,7 @@ dmypy.json
 # папки со статикой и медиа
  static/
  backend/foodgram/static/
+ foodgram/media/
 
 # Папки, создаваемые средой разработки
 .idea
