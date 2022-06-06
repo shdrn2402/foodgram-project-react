@@ -134,3 +134,15 @@ dmypy.json
 # папки со статикой и медиа
  static/
  backend/foodgram/static/
+
+# Папки, создаваемые средой разработки
+.idea
+.DS_Store
+.AppleDouble
+.LSOverride
+
+*.sublime-project
+*.sublime-workspace
+
+.vscode/
+*.code-workspace
