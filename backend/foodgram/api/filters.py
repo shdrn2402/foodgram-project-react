@@ -9,7 +9,7 @@ class IngredientFilter(django_filters.FilterSet):
 
     class Meta:
         model = models.Ingredient
-        fields = ["name", "measurement_unit"]
+        fields = ['name', 'measurement_unit']
 
 
 class AuthorTagFilter(FilterSet):

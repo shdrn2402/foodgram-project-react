@@ -115,7 +115,7 @@ class RecipeViewSet(ModelViewSet):
         for element in ingredients:
             shoping_list.setdefault(
                 element.ingredient.name, {
-                    'unit': element.ingredient.measurement_unit,
+                    'measurement_unit': element.ingredient.measurement_unit,
                     'amount': 0}
             )
             shoping_list[element.ingredient.name]['amount'] += element.amount
@@ -123,7 +123,7 @@ class RecipeViewSet(ModelViewSet):
         to_buy = []
         for item in shoping_list:
             to_buy.append(
-                f'{item} - {shoping_list[item]["amount"]}, '
+                f'{item} - {shoping_list[item]["amount"]} '
                 f'{shoping_list[item]["measurement_unit"]}' + '\n'
             )
         response = HttpResponse(to_buy, 'Content-Type: text/plain')
