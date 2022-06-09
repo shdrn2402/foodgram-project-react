@@ -1,4 +1,5 @@
 from api import models
+from django.db import transaction
 from django.shortcuts import get_object_or_404
 from drf_extra_fields.fields import Base64ImageField
 from rest_framework import serializers
@@ -64,6 +65,7 @@ class RecipeSerializer(serializers.ModelSerializer):
                                             id=obj.id
                                             ).exists()
 
+    @transaction.atomic
     def create(self, validated_data):
         request = self.context.get('request')
         ingredients = self.initial_data.get('ingredients')
@@ -75,17 +77,24 @@ class RecipeSerializer(serializers.ModelSerializer):
 
         for ingredient in ingredients:
             amount = ingredient.get('amount')
-            ingredient_instance = get_object_or_404(models.Ingredient,
-                                                    pk=ingredient.get('id')
-                                                    )
-            models.RecipeIngredient.objects.create(
-                recipe=recipe,
-                ingredient=ingredient_instance,
-                amount=amount
+            ingredient_instance = models.Ingredient.get(
+                pk=ingredient.get('id')
             )
+            models.RecipeIngredient.objects.bulk_create(
+                [recipe, ingredient_instance, amount]
+            )
+            # ingredient_instance = get_object_or_404(models.Ingredient,
+            #                                         pk=ingredient.get('id')
+            #                                         )
+            # models.RecipeIngredient.objects.create(
+            #     recipe=recipe,
+            #     ingredient=ingredient_instance,
+            #     amount=amount
+            # )
         recipe.save()
         return recipe
 
+    @transaction.atomic
     def update(self, instance, validated_data):
         ingredients = self.initial_data.get('ingredients')
         instance.image = validated_data.get('image', instance.image)
@@ -99,11 +108,15 @@ class RecipeSerializer(serializers.ModelSerializer):
         instance.tags.set(tags_data)
         models.RecipeIngredient.objects.filter(recipe=instance).all().delete()
         for ingredient in ingredients:
-            models.RecipeIngredient.objects.create(
-                recipe=instance,
-                ingredient_id=ingredient.get('id'),
-                amount=ingredient.get('amount'),
+            models.RecipeIngredient.objects.bulk_create(
+                [instance, ingredient.get('id'), ingredient.get('amount')]
             )
+        # for ingredient in ingredients:
+        #     models.RecipeIngredient.objects.create(
+        #         recipe=instance,
+        #         ingredient_id=ingredient.get('id'),
+        #         amount=ingredient.get('amount'),
+        #     )
         instance.save()
         return instance
 
