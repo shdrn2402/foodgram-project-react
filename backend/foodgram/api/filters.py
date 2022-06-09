@@ -25,26 +25,46 @@ class AuthorTagFilter(FilterSet):
         tags = self.request.query_params.getlist('tags')
         return queryset.filter(tags__slug__in=tags).distinct()
 
-    def filter_is_favorited(self, queryset, is_favorited, slug):
+    def _is_favorited_is_in_shopping_cart(self, queryset, key):
+        filter_dict = {'favorites': 'is_favorited',
+                       'cart': 'is_in_shopping_cart'
+                       }
         user = self.request.user
         if not user.is_authenticated:
             return queryset
-        is_favorited = self.request.query_params.get('is_favorited', )
-        if is_favorited:
+        value = self.request.query_params.get(filter_dict[key], )
+        if value:
             return queryset.filter(
-                favorites__user=self.request.user
+                **{f'{key}__user': self.request.user}
             ).distinct()
         return queryset
 
+    def filter_is_favorited(self, queryset, is_favorited, slug):
+        return self._is_favorited_is_in_shopping_cart(queryset, 'favorites')
+
     def filter_is_in_shopping_cart(self, queryset, is_in_shopping_cart, slug):
-        user = self.request.user
-        if not user.is_authenticated:
-            return queryset
-        is_in_shopping_cart = self.request.query_params.get(
-            'is_in_shopping_cart',
-        )
-        if is_in_shopping_cart:
-            return queryset.filter(
-                cart__user=self.request.user
-            ).distinct()
-        return queryset
+        return self._is_favorited_is_in_shopping_cart(queryset, 'cart')
+
+    # def filter_is_favorited(self, queryset, is_favorited, slug):
+    #     user = self.request.user
+    #     if not user.is_authenticated:
+    #         return queryset
+    #     is_favorited = self.request.query_params.get('is_favorited', )
+    #     if is_favorited:
+    #         return queryset.filter(
+    #             favorites__user=self.request.user
+    #         ).distinct()
+    #     return queryset
+
+    # def filter_is_in_shopping_cart(self, queryset, is_in_shopping_cart, slug):
+    #     user = self.request.user
+    #     if not user.is_authenticated:
+    #         return queryset
+    #     is_in_shopping_cart = self.request.query_params.get(
+    #         'is_in_shopping_cart',
+    #     )
+    #     if is_in_shopping_cart:
+    #         return queryset.filter(
+    #             cart__user=self.request.user
+    #         ).distinct()
+    #     return queryset
