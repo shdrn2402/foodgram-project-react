@@ -54,12 +54,16 @@ class RecipeViewSet(ModelViewSet):
             serializer = serializers.FavoriteSerializers(favorite)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         if request.method == 'DELETE':
-            favorite = get_object_or_404(
-                models.Favorite,
+            models.Favorite.objects.filter(
                 user=request.user,
                 recipe__id=pk
-            )
-            favorite.delete()
+            ).delete()
+            # favorite = get_object_or_404(
+            #     models.Favorite,
+            #     user=request.user,
+            #     recipe__id=pk
+            # )
+            # favorite.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
         return Response(status=status.HTTP_204_NO_CONTENT)
 
