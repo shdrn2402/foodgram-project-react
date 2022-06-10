@@ -58,12 +58,6 @@ class RecipeViewSet(ModelViewSet):
                 user=request.user,
                 recipe__id=pk
             ).delete()
-            # favorite = get_object_or_404(
-            #     models.Favorite,
-            #     user=request.user,
-            #     recipe__id=pk
-            # )
-            # favorite.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
         return Response(status=status.HTTP_204_NO_CONTENT)
 

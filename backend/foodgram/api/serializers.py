@@ -1,6 +1,5 @@
 from api import models
 from django.db import transaction
-from django.shortcuts import get_object_or_404
 from drf_extra_fields.fields import Base64ImageField
 from rest_framework import serializers
 from users import models as users_models
@@ -83,14 +82,6 @@ class RecipeSerializer(serializers.ModelSerializer):
             models.RecipeIngredient.objects.bulk_create(
                 [recipe, ingredient_instance, amount]
             )
-            # ingredient_instance = get_object_or_404(models.Ingredient,
-            #                                         pk=ingredient.get('id')
-            #                                         )
-            # models.RecipeIngredient.objects.create(
-            #     recipe=recipe,
-            #     ingredient=ingredient_instance,
-            #     amount=amount
-            # )
         recipe.save()
         return recipe
 
@@ -111,12 +102,6 @@ class RecipeSerializer(serializers.ModelSerializer):
             models.RecipeIngredient.objects.bulk_create(
                 [instance, ingredient.get('id'), ingredient.get('amount')]
             )
-        # for ingredient in ingredients:
-        #     models.RecipeIngredient.objects.create(
-        #         recipe=instance,
-        #         ingredient_id=ingredient.get('id'),
-        #         amount=ingredient.get('amount'),
-        #     )
         instance.save()
         return instance
 

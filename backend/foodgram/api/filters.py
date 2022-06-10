@@ -44,27 +44,3 @@ class AuthorTagFilter(FilterSet):
 
     def filter_is_in_shopping_cart(self, queryset, is_in_shopping_cart, slug):
         return self._is_favorited_is_in_shopping_cart(queryset, 'cart')
-
-    # def filter_is_favorited(self, queryset, is_favorited, slug):
-    #     user = self.request.user
-    #     if not user.is_authenticated:
-    #         return queryset
-    #     is_favorited = self.request.query_params.get('is_favorited', )
-    #     if is_favorited:
-    #         return queryset.filter(
-    #             favorites__user=self.request.user
-    #         ).distinct()
-    #     return queryset
-
-    # def filter_is_in_shopping_cart(self, queryset, is_in_shopping_cart, slug):
-    #     user = self.request.user
-    #     if not user.is_authenticated:
-    #         return queryset
-    #     is_in_shopping_cart = self.request.query_params.get(
-    #         'is_in_shopping_cart',
-    #     )
-    #     if is_in_shopping_cart:
-    #         return queryset.filter(
-    #             cart__user=self.request.user
-    #         ).distinct()
-    #     return queryset
