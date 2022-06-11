@@ -11,8 +11,8 @@ SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
 
 DEBUG = int(os.getenv('DJANGO_DEBUG', default=0))
 
-ALLOWED_HOSTS = ['51.250.36.210', 'localhost', 'bestrecipes.ddns.net']
-# ALLOWED_HOSTS = ['*']
+# ALLOWED_HOSTS = ['51.250.36.210', 'localhost', 'bestrecipes.ddns.net']
+ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
