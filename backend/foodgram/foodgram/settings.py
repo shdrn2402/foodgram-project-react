@@ -133,5 +133,5 @@ DJOSER = {
 }
 
 # FIXTURE_DIRS = (
-#     '/users/fixtures/',
+#     '/api/fixtures/',
 # )
