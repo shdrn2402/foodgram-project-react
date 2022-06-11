@@ -7,9 +7,9 @@ load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = os.getenv("DJANGO_SECRET_KEY")
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
 
-DEBUG = int(os.getenv("DJANGO_DEBUG", default=0))
+DEBUG = int(os.getenv('DJANGO_DEBUG', default=0))
 
 # ALLOWED_HOSTS = ['51.250.36.210', 'localhost', 'bestrecipes.ddns.net']
 ALLOWED_HOSTS = ['*']
@@ -102,8 +102,8 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
-MEDIA_URL = "/media/"
-MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
