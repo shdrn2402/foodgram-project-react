@@ -65,26 +65,7 @@ class RecipeSerializer(serializers.ModelSerializer):
                                             id=obj.id
                                             ).exists()
 
-    # @transaction.atomic
-    # def create(self, validated_data):
-    #     request = self.context.get('request')
-    #     ingredients = self.initial_data.get('ingredients')
-    #     tags_data = self.initial_data.get('tags')
-    #     recipe = models.Recipe.objects.create(author=request.user,
-    #                                           **validated_data
-    #                                           )
-    #     recipe.tags.set(tags_data)
-
-    #     for ingredient in ingredients:
-    #         amount = ingredient.get('amount')
-    #         ingredient_instance = models.Ingredient.get(
-    #             pk=ingredient.get('id')
-    #         )
-    #         models.RecipeIngredient.objects.bulk_create(
-    #             [recipe, ingredient_instance, amount]
-    #         )
-    #     recipe.save()
-    #     return recipe
+    @transaction.atomic
     def create(self, validated_data):
         request = self.context.get('request')
         ingredients = self.initial_data.get('ingredients')
@@ -93,15 +74,14 @@ class RecipeSerializer(serializers.ModelSerializer):
                                               **validated_data
                                               )
         recipe.tags.set(tags_data)
+
         for ingredient in ingredients:
             amount = ingredient.get('amount')
-            ingredient_instance = get_object_or_404(models.Ingredient,
-                                                    pk=ingredient.get('id')
-                                                    )
-            models.RecipeIngredient.objects.create(
-                recipe=recipe,
-                ingredient=ingredient_instance,
-                amount=amount
+            ingredient_instance = models.Ingredient.get(
+                pk=ingredient.get('id')
+            )
+            models.RecipeIngredient.objects.bulk_create(
+                [recipe, ingredient_instance, amount]
             )
         recipe.save()
         return recipe
