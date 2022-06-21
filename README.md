@@ -32,7 +32,7 @@
 
 * перейдите в директорию infra/
 
-* выполните команду sudo docker-compose up
+* выполните команду  sudo docker-compose up
 
 * Выполните миграции:
 
