@@ -15,8 +15,7 @@
 ## Подготовка и запуск проекта локально
 
 ## Склонировать репозиторий на локальную машину
-
-* git clone <https://https://github.com/shdrn2402/foodgram-project-react>
+* git clone <https://github.com/shdrn2402/foodgram-project-react>
 
 * Cоздайте .env файл в директории backend/foodgram/fodgram/ и впишите:
 
