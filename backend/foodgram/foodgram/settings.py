@@ -131,7 +131,7 @@ DJOSER = {
 }
 
 CORS_ALLOWED_ORIGINS = [
-    'https://bestrecipes.ddns.net',
+    'https://bestrecipes.ddns.net/recipes/create',
     'http://127.0.0.1:8000',
 ]
 
