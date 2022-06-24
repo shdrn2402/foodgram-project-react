@@ -130,6 +130,11 @@ DJOSER = {
     },
 }
 
+CORS_ALLOWED_ORIGINS = [
+    'https://bestrecipes.ddns.net',
+    'http://127.0.0.1:8000',
+]
+
 # FIXTURE_DIRS = (
 #     '/api/fixtures/',
 # )
