@@ -24,7 +24,6 @@ INSTALLED_APPS = [
 
     'rest_framework',
     'rest_framework.authtoken',
-    # 'corsheaders',
     'djoser',
     'import_export',
 
@@ -35,7 +34,6 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    # 'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -129,13 +127,3 @@ DJOSER = {
         'user': ['rest_framework.permissions.IsAuthenticated']
     },
 }
-
-# CORS_ALLOWED_ORIGINS = [
-#     'https://bestrecipes.ddns.net/recipes/create',
-#     'https://bestrecipes.ddns.net/',
-#     'http://127.0.0.1:8000',
-# ]
-
-# FIXTURE_DIRS = (
-#     '/api/fixtures/',
-# )

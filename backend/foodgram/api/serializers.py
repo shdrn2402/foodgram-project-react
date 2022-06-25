@@ -66,7 +66,6 @@ class RecipeSerializer(serializers.ModelSerializer):
                                             ).exists()
 
     def create(self, validated_data):
-
         request = self.context.get('request')
         ingredients = self.initial_data.get('ingredients')
         tags_data = self.initial_data.get('tags')
@@ -80,36 +79,16 @@ class RecipeSerializer(serializers.ModelSerializer):
             ingredient_instance = get_object_or_404(models.Ingredient,
                                                     pk=ingredient.get('id')
                                                     )
-        models.RecipeIngredient.objects.create(
-            recipe=recipe,
-            ingredient=ingredient_instance,
-            amount=amount
-        )
+            models.RecipeIngredient.objects.bulk_create([
+                models.RecipeIngredient(
+                    recipe=recipe,
+                    ingredient=ingredient_instance,
+                    amount=amount
+                )
+            ])
         recipe.save()
         return recipe
 
-    # @transaction.atomic
-    # def create(self, validated_data):
-    #     request = self.context.get('request')
-    #     ingredients = self.initial_data.get('ingredients')
-    #     tags_data = self.initial_data.get('tags')
-    #     recipe = models.Recipe.objects.create(author=request.user,
-    #                                           **validated_data
-    #                                           )
-    #     recipe.tags.set(tags_data)
-
-    #     for ingredient in ingredients:
-    #         amount = ingredient.get('amount')
-    #         ingredient_instance = models.Ingredient.get(
-    #             pk=ingredient.get('id')
-    #         )
-    #         models.RecipeIngredient.objects.bulk_create(
-    #             [recipe, ingredient_instance, amount]
-    #         )
-    #     recipe.save()
-    #     return recipe
-
-    @transaction.atomic
     def update(self, instance, validated_data):
         ingredients = self.initial_data.get('ingredients')
         instance.image = validated_data.get('image', instance.image)
@@ -123,9 +102,13 @@ class RecipeSerializer(serializers.ModelSerializer):
         instance.tags.set(tags_data)
         models.RecipeIngredient.objects.filter(recipe=instance).all().delete()
         for ingredient in ingredients:
-            models.RecipeIngredient.objects.bulk_create(
-                [instance, ingredient.get('id'), ingredient.get('amount')]
-            )
+            models.RecipeIngredient.objects.bulk_create([
+                models.RecipeIngredient(
+                    recipe=instance,
+                    ingredient=ingredient.get('id'),
+                    amount=ingredient.get('amount')
+                )
+            ])
         instance.save()
         return instance
 
