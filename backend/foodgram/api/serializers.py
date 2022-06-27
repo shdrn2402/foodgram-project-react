@@ -85,6 +85,7 @@ class RecipeSerializer(serializers.ModelSerializer):
                     amount=amount
                 )
             ])
+
         recipe.save()
         return recipe
 
@@ -106,6 +107,7 @@ class RecipeSerializer(serializers.ModelSerializer):
                 ingredient_id=ingredient.get('id'),
                 amount=ingredient.get('amount'),
             )
+
         instance.save()
         return instance
 
