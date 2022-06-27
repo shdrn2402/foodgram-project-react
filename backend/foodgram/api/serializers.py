@@ -64,29 +64,29 @@ class RecipeSerializer(serializers.ModelSerializer):
                                             id=obj.id
                                             ).exists()
 
-    def create(self, validated_data):
-        request = self.context.get('request')
-        ingredients = self.initial_data.get('ingredients')
-        tags_data = self.initial_data.get('tags')
-        recipe = models.Recipe.objects.create(author=request.user,
-                                              **validated_data
-                                              )
-        recipe.tags.set(tags_data)
+    # def create(self, validated_data):
+    #     request = self.context.get('request')
+    #     ingredients = self.initial_data.get('ingredients')
+    #     tags_data = self.initial_data.get('tags')
+    #     recipe = models.Recipe.objects.create(author=request.user,
+    #                                           **validated_data
+    #                                           )
+    #     recipe.tags.set(tags_data)
 
-        for ingredient in ingredients:
-            amount = ingredient.get('amount')
-            ingredient_instance = get_object_or_404(models.Ingredient,
-                                                    pk=ingredient.get('id')
-                                                    )
-            models.RecipeIngredient.objects.bulk_create([
-                models.RecipeIngredient(
-                    recipe=recipe,
-                    ingredient=ingredient_instance,
-                    amount=amount
-                )
-            ])
-        recipe.save()
-        return recipe
+    #     for ingredient in ingredients:
+    #         amount = ingredient.get('amount')
+    #         ingredient_instance = get_object_or_404(models.Ingredient,
+    #                                                 pk=ingredient.get('id')
+    #                                                 )
+    #         models.RecipeIngredient.objects.bulk_create([
+    #             models.RecipeIngredient(
+    #                 recipe=recipe,
+    #                 ingredient=ingredient_instance,
+    #                 amount=amount
+    #             )
+    #         ])
+    #     recipe.save()
+    #     return recipe
 
     def update(self, instance, validated_data):
         ingredients = self.initial_data.get('ingredients')
