@@ -103,12 +103,16 @@ class RecipeSerializer(serializers.ModelSerializer):
         tags_data = self.initial_data.get('tags')
         instance.tags.set(tags_data)
         models.RecipeIngredient.objects.filter(recipe=instance).all().delete()
+        objects = []
         for ingredient in ingredients:
-            models.RecipeIngredient.objects.create(
-                recipe=instance,
-                ingredient_id=ingredient.get('id'),
-                amount=ingredient.get('amount'),
+            objects.append(
+                models.RecipeIngredient(
+                    recipe=instance,
+                    ingredient_id=ingredient.get('id'),
+                    amount=ingredient.get('amount'),
+                )
             )
+        models.RecipeIngredient.objects.bulk_create(objects)
         instance.save()
         return instance
 
