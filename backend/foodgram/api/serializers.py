@@ -34,7 +34,6 @@ class RecipeIngredientSerializers(serializers.ModelSerializer):
 
 
 class RecipeSerializer(serializers.ModelSerializer):
-
     author = users_serializers.CustomUserSerializer(read_only=True)
     tags = TagSerializer(many=True, read_only=True)
     ingredients = RecipeIngredientSerializers(many=True, read_only=True)
@@ -93,7 +92,6 @@ class RecipeSerializer(serializers.ModelSerializer):
         return recipe
 
     def update(self, instance, validated_data):
-
         ingredients = self.initial_data.get('ingredients')
         instance.image = validated_data.get('image', instance.image)
         instance.name = validated_data.get('name', instance.name)
