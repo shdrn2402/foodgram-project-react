@@ -176,6 +176,8 @@ sudo docker-compose exec backend python manage.py createsuperuser
 
 * Проект запущен и доступен по [адресу](http://bestrecipes.ddns.net/recipes)
 
+* Если адрес bestrecipes.ddns.net недоступен то по [адресу](http://51.250.36.210/recipes)
+
 * Admin - панель доступна по [адресу](http://bestrecipes.ddns.net/admin)
 
 * логин/email/пароль суперпользователя: admin/admin@fake.ru/234WERsdf
