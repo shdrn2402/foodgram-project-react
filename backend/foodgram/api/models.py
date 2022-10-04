@@ -5,7 +5,7 @@ from users.models import User
 
 class Tag(models.Model):
     name = models.CharField(
-        max_length=200, unique=True, verbose_name='Название ярлыка'
+        max_length=250, unique=True, verbose_name='Название ярлыка'
     )
     color = models.CharField(
         max_length=50, unique=True, verbose_name='Цвет ярлыка'
