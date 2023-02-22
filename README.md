@@ -172,7 +172,7 @@ sudo docker-compose exec backend python manage.py createsuperuser
 
 Проект будет доступен по вашему IP. Наполнение базы тестовыми данными описано выше.
 
-## Проект в интернете
+## Проект в интернете В ДАННЫЙ МОМЕНТ СЕРВЕР НЕ РАБОТАЕТ
 
 * Проект запущен и доступен по [адресу](http://bestrecipes.ddns.net/recipes)
 
